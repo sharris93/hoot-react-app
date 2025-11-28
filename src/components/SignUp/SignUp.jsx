@@ -31,7 +31,11 @@ const SignUp = () => {
       navigate('/sign-in')
     } catch (error) {
       console.log(error)
-      setErrorData(error.response.data)
+      if (error.response.status === 500) {
+        setErrorData({ message: 'Something went wrong. Please try again.' })
+      } else {
+        setErrorData(error.response.data)
+      }
     }
   }
 
@@ -42,29 +46,31 @@ const SignUp = () => {
 
         <div className="form-control">
           <label hidden htmlFor="username">Username</label>
-          <input type="text" name="username" id="username" placeholder='Username' onChange={handleChange} />
+          <input type="text" name="username" id="username" placeholder='Username' onChange={handleChange} required />
           { errorData.username && <p className='error-message'>{errorData.username}</p> }
         </div>
 
         <div className="form-control">
           <label hidden htmlFor="email">Email</label>
-          <input type="text" name="email" id="email" placeholder='Email' onChange={handleChange} />
+          <input type="text" name="email" id="email" placeholder='Email' onChange={handleChange} required />
           { errorData.email && <p className='error-message'>{errorData.email}</p> }
         </div>
 
         <div className="form-control">
           <label hidden htmlFor="password">Password</label>
-          <input type="password" name="password" id="password" placeholder='Password' onChange={handleChange} />
+          <input type="password" name="password" id="password" placeholder='Password' onChange={handleChange} required />
           { errorData.password && <p className='error-message'>{errorData.password}</p> }
         </div>
 
         <div className="form-control">
           <label hidden htmlFor="confirmPassword">Re-type your password</label>
-          <input type="password" name="confirmPassword" id="confirmPassword" placeholder='Re-type your password' onChange={handleChange} />
+          <input type="password" name="confirmPassword" id="confirmPassword" placeholder='Re-type your password' onChange={handleChange} required />
           { errorData.confirmPassword && <p className='error-message'>{errorData.confirmPassword}</p> }
         </div>
 
         <button type="submit">Create account</button>
+
+        {errorData.message && <p className='error-message'>{errorData.message}</p> }
       </form>
     </>
   )
